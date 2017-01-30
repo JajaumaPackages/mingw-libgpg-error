@@ -2,7 +2,7 @@
 
 Name:           mingw-libgpg-error
 Version:        1.22
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        MinGW Windows GnuPGP error library
 
 License:        LGPLv2+
@@ -26,9 +26,6 @@ BuildRequires:  mingw64-win-iconv
 BuildRequires:  mingw64-gettext
 
 BuildRequires:  gettext
-
-# See comment in %%prep for details
-BuildRequires:  libtool autoconf automake gettext-devel
 
 
 %description
@@ -68,20 +65,15 @@ Static library for mingw64-libgpg-error development.
 %prep
 %setup -q -n libgpg-error-%{version}
 
-# Upstream has applied a libtool hack in libgpg-error 1.12
-# which automatically gives the libgpg-error library a
-# different filename for the win64 target so that
-# the libgpg-error DLL's for both the win32 and win64
-# targets can be installed in the same folder.
-#
-# As installing both win32 and win64 libraries in the same
-# folder is bad practice and breaks earlier behavior undo
-# this libtool hack here by re-running libtoolize
-autoreconf -i --force
-
 
 %build
 %mingw_configure --enable-shared --enable-static
+
+# hack on hack: don't rename x86_64 mingw libraries
+sed -e 's/versuffix="6-/versuffix="-/' \
+    -i build_win32/libtool \
+    -i build_win64/libtool
+
 %mingw_make %{?_smp_mflags}
 
 
@@ -124,6 +116,9 @@ rm -rf $RPM_BUILD_ROOT%{mingw64_infodir} $RPM_BUILD_ROOT%{mingw64_mandir}
 
 
 %changelog
+* Mon Jan 30 2017 Jajauma's Packages <jajauma@yandex.ru> - 1.22-2
+- hack on hack: don't rename x86_64 mingw libraries
+
 * Sat May 07 2016 Erik van Pienbroek <epienbro@fedoraproject.org> - 1.22-1
 - Update to 1.22
 - Fixes FTBFS
