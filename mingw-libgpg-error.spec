@@ -2,7 +2,7 @@
 
 Name:           mingw-libgpg-error
 Version:        1.22
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        MinGW Windows GnuPGP error library
 
 License:        LGPLv2+
@@ -116,6 +116,9 @@ rm -rf $RPM_BUILD_ROOT%{mingw64_infodir} $RPM_BUILD_ROOT%{mingw64_mandir}
 
 
 %changelog
+* Fri Feb 03 2017 Jajauma's Packages <jajauma@yandex.ru> - 1.22-3
+- Rebuild with GCC 5.4.0
+
 * Mon Jan 30 2017 Jajauma's Packages <jajauma@yandex.ru> - 1.22-2
 - hack on hack: don't rename x86_64 mingw libraries
 
